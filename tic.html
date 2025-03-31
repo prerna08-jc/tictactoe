@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prerna's Portfolio</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background-color: #f0f0f5; color: #333; text-align: center; }
+        header { background-color: #4CAF50; color: white; padding: 20px; }
+        .project { background: white; margin: 20px auto; padding: 15px; width: 80%; max-width: 500px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); border-radius: 10px; }
+        button { background-color: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        button:hover { background-color: #45a049; }
+        footer { margin-top: 20px; padding: 10px; background-color: #eee; color: #777; }
+        #gameBoard { display: grid; grid-template-columns: repeat(3, 100px); grid-template-rows: repeat(3, 100px); gap: 5px; margin: 20px auto; width: 310px; }
+        .cell { background-color: #fff; display: flex; align-items: center; justify-content: center; font-size: 36px; border: 1px solid #ccc; cursor: pointer; }
+        .cell:hover { background-color: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to Prerna's Portfolio</h1>
+        <p>Explore my creative projects in HTML, CSS, and JavaScript!</p>
+    </header>
+
+    <section id="projects">
+        <h2>Projects</h2>
+        <div class="project">
+            <h3>Tic Tac Toe</h3>
+            <p>A classic 2-player game with a sleek design and interactive gameplay.</p>
+            <button onclick="startTicTacToe()">Play Tic Tac Toe</button>
+            <button onclick="resetGame()">Reset Game</button>
+            <div id="gameBoard"></div>
+            <p id="winnerMessage"></p>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Prerna's Portfolio. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let currentPlayer = 'X';
+        const cells = [];
+
+        function startTicTacToe() {
+            const board = document.getElementById('gameBoard');
+            board.innerHTML = '';
+            document.getElementById('winnerMessage').innerText = '';
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.dataset.index = i;
+                cell.addEventListener('click', makeMove);
+                board.appendChild(cell);
+                cells[i] = '';
+            }
+        }
+
+        function makeMove(event) {
+            const index = event.target.dataset.index;
+            if (!cells[index] && !document.getElementById('winnerMessage').innerText) {
+                cells[index] = currentPlayer;
+                event.target.innerText = currentPlayer;
+                if (checkWinner()) {
+                    document.getElementById('winnerMessage').innerText = `${currentPlayer} Wins!`;
+                } else {
+                    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                }
+            }
+        }
+
+        function checkWinner() {
+            const winPatterns = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8],
+                [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                [0, 4, 8], [2, 4, 6]
+            ];
+            return winPatterns.some(pattern =>
+                pattern.every(index => cells[index] === currentPlayer)
+            );
+        }
+
+        function resetGame() {
+            currentPlayer = 'X';
+            startTicTacToe();
+        }
+    </script>
+</body>
+</html>
